@@ -11,7 +11,7 @@ const Souscription = () => {
     const queryParams = new URLSearchParams(location.search);
     const isModeAgence = queryParams.get('mode') === 'agence';
 
-    // Récupération de la date du jour au format YYYY-MM-DD (2026)
+    // Récupération de la date du jour au format YYYY-MM-DD
     const aujourdhui = new Date().toISOString().split('T')[0];
 
     // States pour l'agence
@@ -28,7 +28,7 @@ const Souscription = () => {
     const [passeport, setPasseport] = useState('');
     const [zone, setZone] = useState('2'); 
     const [destination, setDestination] = useState('Gabon');
-    const [dateEffet, setDateEffet] = useState(aujourdhui); // Initialisé à aujourd'hui
+    const [dateEffet, setDateEffet] = useState(aujourdhui);
     const [dateEcheance, setDateEcheance] = useState('');
     const [dateNaissance, setDateNaissance] = useState('');
     const [totalTTC, setTotalTTC] = useState(27000);
@@ -36,8 +36,7 @@ const Souscription = () => {
     const [ageError, setAgeError] = useState('');
     const [accepteDonnees, setAccepteDonnees] = useState(false);
 
-    // Sécurité supplémentaire : si l'utilisateur change la date d'effet, 
-    // on vérifie qu'elle n'est pas antérieure à aujourd'hui
+    // Sécurité de date d'effet
     const handleDateEffetChange = (e) => {
         const nouvelleDate = e.target.value;
         if (nouvelleDate < aujourdhui) {
@@ -130,14 +129,14 @@ const Souscription = () => {
 
     return (
         <div style={styles.body}>
-            <div style={{ maxWidth: '800px', margin: '0 auto 20px auto', display: 'flex', justifyContent: 'space-between' }}>
+            <div className="no-print" style={{ maxWidth: '800px', margin: '0 auto 20px auto', display: 'flex', justifyContent: 'space-between' }}>
                 <button onClick={() => navigate('/')} style={styles.btnHome}>
                     <Home size={18} /> 
                 </button>
             </div>
 
             {isModeAgence && (
-                <div style={styles.agentBar}>
+                <div className="no-print" style={styles.agentBar}>
                     <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
                         <ShieldCheck color="#3b82f6" />
                         <input 
@@ -153,7 +152,7 @@ const Souscription = () => {
                 </div>
             )}
 
-            <div style={styles.a4Page}>
+            <div style={styles.a4Page} className="a4-container">
                 <table style={styles.headerTable}>
                     <tbody>
                         <tr>
@@ -161,7 +160,7 @@ const Souscription = () => {
                             <td style={styles.contractTitle}>
                                 <h2 style={styles.h2}>CONTRAT ASSURANCE VOYAGE : SAMBA VOYAGE</h2>
                                 <p style={styles.p}>Régi par le Code des assurances CIMA</p>
-                                <div style={{ fontWeight: 'bold', marginTop: '10px' }}>CONDITIONS PARTICULIERES</div>
+                                <div style={{ fontSize: '12px', fontWeight: 'bold', marginTop: '10px' }}>CONDITIONS PARTICULIERES</div>
                             </td>
                             <td width="20%" style={styles.serialNumber}>SV-{Date.now().toString().slice(-6)}</td>
                         </tr>
@@ -171,7 +170,7 @@ const Souscription = () => {
                 <table style={styles.mainTable}>
                     <tbody>
                         <tr>
-                            <td style={styles.sectionTitle} rowSpan="3">Couverture</td>
+                            <td style={styles.sectionTitle} rowSpan="3" className="table-section-title">Couverture</td>
                             <td style={styles.cellLabel}>Zone :</td>
                             <td style={styles.cellInput}>
                                 <select style={styles.invisibleInput} value={zone} onChange={handleZoneChange}>
@@ -194,26 +193,28 @@ const Souscription = () => {
                         </tr>
                         <tr>
                             <td style={styles.cellLabel}>Période :</td>
-                            <td style={styles.cellInput}>
-                                effet <input 
-                                        type="date" 
-                                        style={styles.dateField} 
-                                        value={dateEffet} 
-                                        min={aujourdhui} // Bloque les dates passées
-                                        onChange={handleDateEffetChange} 
-                                      /> 
-                                échéance <input 
-                                            type="date" 
-                                            style={styles.dateField} 
-                                            value={dateEcheance} 
-                                            min={dateEffet} // L'échéance doit être après l'effet
-                                            onChange={(e) => setDateEcheance(e.target.value)} 
-                                         />
+                            <td style={styles.cellInput} className="responsive-date-cell">
+                                <span>effet</span> 
+                                <input 
+                                    type="date" 
+                                    style={styles.dateField} 
+                                    value={dateEffet} 
+                                    min={aujourdhui}
+                                    onChange={handleDateEffetChange} 
+                                /> 
+                                <span>échéance</span> 
+                                <input 
+                                    type="date" 
+                                    style={styles.dateField} 
+                                    value={dateEcheance} 
+                                    min={dateEffet}
+                                    onChange={(e) => setDateEcheance(e.target.value)} 
+                                 />
                             </td>
                         </tr>
 
                         <tr>
-                            <td style={styles.sectionTitle} rowSpan="3">Souscripteur</td>
+                            <td style={styles.sectionTitle} rowSpan="3" className="table-section-title">Souscripteur</td>
                             <td style={styles.cellLabel}>Nom & Prénom :</td>
                             <td style={styles.cellInput}><input style={styles.invisibleInput} value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Saisir..." /></td>
                         </tr>
@@ -230,7 +231,7 @@ const Souscription = () => {
                         </tr>
 
                         <tr>
-                            <td style={styles.sectionTitle}>Prestataire</td>
+                            <td style={styles.sectionTitle} className="table-section-title">Prestataire</td>
                             <td style={styles.cellLabel}>Assistance :</td>
                             <td style={styles.cellInput}>
                                 <div style={{fontSize: '13px', fontWeight: 'bold'}}>AFRICA FIRST ASSIST (AFA)</div>
@@ -239,7 +240,7 @@ const Souscription = () => {
                         </tr>
 
                         <tr>
-                            <td style={styles.sectionTitle}>Cotisations</td>
+                            <td style={styles.sectionTitle} className="table-section-title">Cotisations</td>
                             <td style={styles.cellLabel}>Total TTC :</td>
                             <td style={styles.cellInput}>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -251,21 +252,21 @@ const Souscription = () => {
                     </tbody>
                 </table>
 
-                <div style={styles.rgpdBox}>
+                <div style={styles.rgpdBox} className="no-print">
                     <input type="checkbox" id="rgpd" checked={accepteDonnees} onChange={(e) => setAccepteDonnees(e.target.checked)} />
                     <label htmlFor="rgpd" style={{fontSize: '11px', marginLeft: '10px', cursor: 'pointer'}}>
                         J'accepte le traitement de mes données par <strong>SAG</strong> conformément à la réglementation en vigueur.
                     </label>
                 </div>
 
-                <div style={styles.signatureSection}>
+                <div style={styles.signatureSection} className="responsive-signature">
                     <div><strong>Le Souscripteur</strong><div style={styles.signatureBox}></div></div>
-                    <div style={{ textAlign: 'center', fontSize: '8px', color: '#64748b', alignSelf: 'flex-end' }}>F1: SAMB'A | F2: AFA | F3: ASSURÉ</div>
+                    <div className="signature-info" style={{ textAlign: 'center', fontSize: '8px', color: '#64748b', alignSelf: 'flex-end' }}>F1: SAMB'A | F2: AFA | F3: ASSURÉ</div>
                     <div><strong>L'Assureur (Samba)</strong><div style={styles.signatureBox}></div></div>
                 </div>
             </div>
 
-            <div style={styles.btnContainer}>
+            <div className="no-print" style={styles.btnContainer}>
                 <button onClick={() => window.print()} style={styles.btnPrint}>Imprimer</button>
                 <button 
                     onClick={() => {
@@ -283,7 +284,7 @@ const Souscription = () => {
             </div>
 
             {showModal && (
-                <div style={styles.modalOverlay}>
+                <div style={styles.modalOverlay} className="no-print">
                     <div style={styles.modalContent}>
                         <h3>Mode de paiement</h3>
                         <div style={styles.paymentOptions}>
@@ -299,35 +300,90 @@ const Souscription = () => {
     );
 };
 
+// --- DESIGN SYSTEM (PC PAR DÉFAUT) ---
 const styles = {
-    body: { background: '#f0f2f5', padding: '20px', minHeight: '100vh', fontFamily: 'sans-serif' },
+    body: { background: '#f0f2f5', padding: '20px', minHeight: '100vh', fontFamily: 'Segoe UI, system-ui, sans-serif', boxSizing: 'border-box' },
     btnHome: { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'white', border: '1px solid #cbd5e1', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold' },
-    agentBar: { maxWidth: '800px', margin: '0 auto 20px auto', background: '#eff6ff', padding: '15px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '2px solid #3b82f6' },
+    agentBar: { maxWidth: '800px', margin: '0 auto 20px auto', background: '#eff6ff', padding: '15px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '2px solid #3b82f6', boxSizing: 'border-box' },
     agentInput: { border: 'none', outline: 'none', background: 'transparent', fontSize: '14px', fontWeight: 'bold', width: '200px', color: '#1e40af' },
-    a4Page: { background: 'white', width: '800px', margin: '0 auto', padding: '30px', border: '1px solid #d1d5db', boxSizing: 'border-box' },
+    a4Page: { background: 'white', width: '800px', margin: '0 auto', padding: '40px', border: '1px solid #d1d5db', boxSizing: 'border-box', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.03)' },
     headerTable: { width: '100%', marginBottom: '20px' },
-    logo: { width: '100px' },
-    contractTitle: { textAlign: 'center' },
-    h2: { margin: 0, fontSize: '16px' },
-    p: { margin: 0, fontSize: '10px' },
-    serialNumber: { color: '#e11d48', fontWeight: 'bold', textAlign: 'right' },
+    logo: { width: '90px', borderRadius: '6px' },
+    contractTitle: { textAlign: 'center', verticalAlign: 'middle' },
+    h2: { margin: 0, fontSize: '15px', color: '#1e293b', fontWeight: '800' },
+    p: { margin: '2px 0 0 0', fontSize: '10px', color: '#64748b' },
+    serialNumber: { color: '#e11d48', fontWeight: '800', textAlign: 'right', fontSize: '13px', verticalAlign: 'middle' },
     mainTable: { width: '100%', borderCollapse: 'collapse', marginBottom: '20px' },
-    sectionTitle: { border: '1px solid #000', background: '#f8fafc', fontWeight: 'bold', fontSize: '11px', width: '110px', textAlign: 'center', textTransform: 'uppercase' },
-    cellLabel: { border: '1px solid #000', padding: '8px', fontSize: '11px', fontWeight: '500', width: '130px' },
-    cellInput: { border: '1px solid #000', padding: '5px 10px' },
-    invisibleInput: { border: 'none', width: '100%', outline: 'none', fontSize: '13px', background: 'transparent', cursor: 'pointer' },
-    dateField: { border: 'none', fontSize: '12px', outline: 'none', background: 'transparent', cursor: 'pointer' },
-    rgpdBox: { marginTop: '20px', display: 'flex', alignItems: 'center', padding: '10px', background: '#f1f5f9', borderRadius: '5px' },
-    signatureSection: { display: 'flex', justifyContent: 'space-between', marginTop: '30px' },
-    signatureBox: { border: '1px solid #000', width: '180px', height: '70px', marginTop: '5px' },
-    btnContainer: { textAlign: 'center', marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '20px' },
-    btnPrint: { padding: '12px 30px', background: '#64748b', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none' },
-    btnValidate: { padding: '12px 30px', background: '#39b54a', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none', fontWeight: 'bold' },
-    btnDisabled: { padding: '12px 30px', background: '#cbd5e1', color: '#94a3b8', borderRadius: '8px', cursor: 'not-allowed', border: 'none' },
-    modalOverlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modalContent: { background: 'white', padding: '30px', borderRadius: '15px', width: '350px', textAlign: 'center' },
-    paymentOptions: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '20px' },
-    payBtn: { border: '1px solid #e2e8f0', background: '#f8fafc', padding: '10px', borderRadius: '10px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center' }
+    sectionTitle: { border: '1px solid #000', background: '#f8fafc', fontWeight: 'bold', fontSize: '11px', width: '110px', textAlign: 'center', textTransform: 'uppercase', color: '#334155' },
+    cellLabel: { border: '1px solid #000', padding: '10px', fontSize: '11px', fontWeight: '600', width: '130px', color: '#334155' },
+    cellInput: { border: '1px solid #000', padding: '6px 12px', verticalAlign: 'middle' },
+    invisibleInput: { border: 'none', width: '100%', outline: 'none', fontSize: '13px', background: 'transparent', cursor: 'pointer', fontFamily: 'inherit', color: '#000' },
+    dateField: { border: 'none', fontSize: '13px', outline: 'none', background: 'transparent', cursor: 'pointer', fontFamily: 'inherit', color: '#000' },
+    rgpdBox: { marginTop: '20px', display: 'flex', alignItems: 'center', padding: '12px', background: '#f1f5f9', borderRadius: '8px' },
+    signatureSection: { display: 'flex', justifyContent: 'space-between', marginTop: '40px' },
+    signatureBox: { border: '1px solid #475569', width: '190px', height: '75px', marginTop: '8px', borderRadius: '4px', background: '#fefefe' },
+    btnContainer: { textAlign: 'center', marginTop: '30px', display: 'flex', justifyContent: 'center', gap: '20px' },
+    btnPrint: { padding: '12px 30px', background: '#64748b', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none', fontWeight: '600', fontSize: '14px' },
+    btnValidate: { padding: '12px 30px', background: '#39b54a', color: 'white', borderRadius: '8px', cursor: 'pointer', border: 'none', fontWeight: '700', fontSize: '14px' },
+    btnDisabled: { padding: '12px 30px', background: '#cbd5e1', color: '#94a3b8', borderRadius: '8px', cursor: 'not-allowed', border: 'none', fontWeight: '700', fontSize: '14px' },
+    modalOverlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.4)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100 },
+    modalContent: { background: 'white', padding: '30px', borderRadius: '15px', width: '350px', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' },
+    paymentOptions: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '20px' },
+    payBtn: { border: '1px solid #e2e8f0', background: '#f8fafc', padding: '12px', borderRadius: '10px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '13px', color: '#334155' }
 };
+
+// --- INJECTION STYLES CSS RESPONSIVE & IMPRESSION ---
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = `
+/* GESTION MOBILE & TABLETTE */
+@media (max-width: 840px) {
+    .a4-container {
+        width: 100% !important;
+        padding: 20px 15px !important;
+    }
+    .responsive-date-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .responsive-signature {
+        flex-direction: column !important;
+        gap: 20px;
+    }
+    .responsive-signature > div {
+        width: 100%;
+    }
+    .styles_signatureBox__custom {
+        width: 100% !important;
+    }
+    .signature-info {
+        align-self: center !important;
+        margin: 10px 0;
+    }
+    .table-section-title {
+        font-size: 9px !important;
+        width: 70px !important;
+    }
+}
+
+/* CONFIGURATION IMPREVISIBLE DE L'IMPRESSION CLEAN */
+@media print {
+    body, .body {
+        background: white !important;
+        padding: 0 !important;
+    }
+    .no-print {
+        display: none !important;
+    }
+    .a4-container {
+        width: 100% !important;
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+}
+`;
+document.head.appendChild(styleSheet);
 
 export default Souscription;

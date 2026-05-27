@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { 
     ChevronDown, CreditCard, User, ShieldCheck, 
-    FileText, HelpCircle, LifeBuoy, FileSearch, Trash2, ArrowLeft, Globe
+    FileText, HelpCircle, FileSearch, Trash2, ArrowLeft, Globe
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar'; // Import de ton composant Navbar global
+
+// Importation de tes images
 import logoSamba from '../assets/Logo Samba.jpeg'; 
 import faqImage from '../assets/img3.jpg'; 
 
@@ -14,7 +17,7 @@ const FAQ = () => {
 
     const categories = [
         { 
-            id: "Espace Client", title: "Espace Client", icon: <User size={30} />,
+            id: "Espace Client", title: "Espace Client", icon: <User size={28} />,
             content: {
                 intro: "Gérez votre contrat et vos services en ligne en toute autonomie.",
                 questions: [
@@ -24,7 +27,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Souscription", title: "Souscription & Renouvellement", icon: <ShieldCheck size={30} />,
+            id: "Souscription", title: "Souscription & Renouvellement", icon: <ShieldCheck size={28} />,
             content: {
                 intro: "Nos conseils pour adhérer ou prolonger votre protection.",
                 questions: [
@@ -34,7 +37,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Garanties", title: "Garanties", icon: <HelpCircle size={30} />,
+            id: "Garanties", title: "Garanties", icon: <HelpCircle size={28} />,
             content: {
                 intro: "Comprendre l'étendue de votre protection internationale.",
                 questions: [
@@ -46,7 +49,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Documents", title: "Documents & Attestations", icon: <FileText size={30} />,
+            id: "Documents", title: "Documents & Attestations", icon: <FileText size={28} />,
             content: {
                 intro: "Accédez à vos documents officiels en un clic.",
                 questions: [
@@ -57,7 +60,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Paiement", title: "Paiements", icon: <CreditCard size={30} />,
+            id: "Paiement", title: "Paiements", icon: <CreditCard size={28} />,
             content: {
                 intro: "Réglez vos cotisations en toute sécurité.",
                 questions: [
@@ -67,7 +70,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Remboursement", title: "Remboursements", icon: <FileSearch size={30} />,
+            id: "Remboursement", title: "Remboursements", icon: <FileSearch size={28} />,
             content: {
                 intro: "Comment vous faire rembourser vos frais de santé.",
                 questions: [
@@ -78,7 +81,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Résiliation", title: "Résiliation", icon: <Trash2 size={30} />,
+            id: "Résiliation", title: "Résiliation", icon: <Trash2 size={28} />,
             content: {
                 intro: "Les modalités pour mettre fin à votre contrat.",
                 questions: [
@@ -88,7 +91,7 @@ const FAQ = () => {
             }
         },
         { 
-            id: "Assistance", title: "Couverture à l'étranger", icon: <Globe size={30} />,
+            id: "Assistance", title: "Couverture à l'étranger", icon: <Globe size={28} />,
             content: {
                 intro: "Tout savoir sur les systèmes de santé internationaux.",
                 questions: [
@@ -106,49 +109,87 @@ const FAQ = () => {
         { q: "Puis-je souscrire depuis l'étranger ?", a: "Non, la loi impose de souscrire avant votre départ du Gabon." }
     ];
 
-    return (
-        <div style={styles.container}>
-            <div style={styles.topBar}>
-                <img src={logoSamba} alt="Logo" style={styles.logo} onClick={() => navigate('/')} />
-            </div>
+    const handleCategoryClick = (cat) => {
+        setSelectedCategory(cat);
+        // Ajustement du scroll fluide selon la taille de l'écran
+        const offset = window.innerWidth < 768 ? 550 : 380;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+    };
 
-            <div style={styles.content}>
+    return (
+        <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+            {/* 1. NAVBAR COMMUNE */}
+            <Navbar />
+
+            <div style={styles.container} className="responsive-container">
+                {/* PETIT LOGO / FIL D'ARIANE */}
+                <div style={styles.topBar}>
+                    <img src={logoSamba} alt="Logo" style={styles.logo} onClick={() => navigate('/')} />
+                </div>
+
+                {/* HERO BANNER DE LA FAQ */}
                 {!selectedCategory && (
-                    <div style={styles.heroSection}>
-                        <div style={styles.imageWrapper}><img src={faqImage} alt="FAQ" style={styles.heroImage} /></div>
-                        <div style={styles.textWrapper}>
-                            <h1 style={styles.title}>Foire aux questions</h1>
-                            <p style={styles.subtitle}>Besoin d'infos ? Cliquez sur une catégorie pour voir les détails.</p>
+                    <div style={styles.heroSection} className="responsive-hero">
+                        <div style={styles.imageWrapper}>
+                            <img src={faqImage} alt="FAQ" style={styles.heroImage} />
+                        </div>
+                        <div style={styles.textWrapper} className="responsive-text-center">
+                            <h1 style={styles.title} className="responsive-main-title">Foire aux questions</h1>
+                            <p style={styles.subtitle}>Besoin d'informations ? Cliquez sur une catégorie ci-dessous pour voir les détails.</p>
                         </div>
                     </div>
                 )}
 
-                {/* GRILLE DE NAVIGATION */}
-                <div style={styles.gridContainer}>
-                    {categories.map((cat) => (
-                        <div key={cat.id} onClick={() => { setSelectedCategory(cat); window.scrollTo({top: 400, behavior: 'smooth'}); }}
-                            onMouseEnter={() => setHoveredId(cat.id)} onMouseLeave={() => setHoveredId(null)}
-                            style={{...styles.categoryCard, borderColor: selectedCategory?.id === cat.id ? '#39b54a' : '#e2e8f0', background: selectedCategory?.id === cat.id ? '#f0fff4' : 'white', transform: hoveredId === cat.id ? 'translateY(-5px)' : 'none'}}>
-                            <div style={{color: selectedCategory?.id === cat.id || hoveredId === cat.id ? '#39b54a' : '#64748b'}}>{cat.icon}</div>
-                            <span style={{...styles.categoryTitle, color: selectedCategory?.id === cat.id ? '#39b54a' : '#334155'}}>{cat.title}</span>
-                        </div>
-                    ))}
+                {/* GRILLE DES CATÉGORIES (BOUTONS) */}
+                <div style={styles.gridContainer} className="responsive-grid">
+                    {categories.map((cat) => {
+                        const isSelected = selectedCategory?.id === cat.id;
+                        return (
+                            <div 
+                                key={cat.id} 
+                                onClick={() => handleCategoryClick(cat)}
+                                onMouseEnter={() => setHoveredId(cat.id)} 
+                                onMouseLeave={() => setHoveredId(null)}
+                                style={{
+                                    ...styles.categoryCard, 
+                                    borderColor: isSelected ? '#39b54a' : '#e2e8f0', 
+                                    background: isSelected ? '#f0fdf4' : 'white', 
+                                    transform: hoveredId === cat.id ? 'translateY(-4px)' : 'none',
+                                    boxShadow: hoveredId === cat.id || isSelected ? '0 10px 20px rgba(0,0,0,0.04)' : 'none'
+                                }}
+                            >
+                                <div style={{ color: isSelected || hoveredId === cat.id ? '#39b54a' : '#64748b', transition: 'color 0.2s' }}>
+                                    {cat.icon}
+                                </div>
+                                <span style={{ ...styles.categoryTitle, color: isSelected ? '#39b54a' : '#334155' }}>
+                                    {cat.title}
+                                </span>
+                            </div>
+                        );
+                    })}
                 </div>
 
-                {/* VUE DÉTAILLÉE (TYPE APRIL) */}
+                {/* ZONE D'AFFICHAGE DÉTAILLÉE */}
                 {selectedCategory && (
-                    <div style={styles.detailsContainer}>
-                        <button onClick={() => setSelectedCategory(null)} style={styles.backBtn}><ArrowLeft size={18} /> Retour</button>
-                        <div style={styles.detailsFlex}>
-                            <div style={styles.sidebar}>
+                    <div style={styles.detailsContainer} className="responsive-details-padding">
+                        <button onClick={() => setSelectedCategory(null)} style={styles.backBtn}>
+                            <ArrowLeft size={16} /> Retour aux catégories
+                        </button>
+                        
+                        <div style={styles.detailsFlex} className="responsive-details-flex">
+                            {/* SOMMAIRE LATÉRAL (Masqué ou réorganisé sur mobile) */}
+                            <div style={styles.sidebar} className="responsive-sidebar">
                                 <h3 style={styles.sidebarTitle}>Sommaire</h3>
                                 {selectedCategory.content.questions.map((q) => (
                                     <a key={q.id} href={`#${q.id}`} style={styles.sidebarLink}>{q.title}</a>
                                 ))}
                             </div>
+                            
+                            {/* CONTENU PRINCIPAL DES RÉPONSES */}
                             <div style={styles.mainDetailContent}>
                                 <h2 style={styles.detailMainTitle}>{selectedCategory.title}</h2>
                                 <p style={styles.introText}>{selectedCategory.content.intro}</p>
+                                
                                 {selectedCategory.content.questions.map((q, i) => (
                                     <section id={q.id} key={q.id} style={styles.questionSection}>
                                         <h3 style={styles.questionTitle}>{i + 1}. {q.title}</h3>
@@ -161,13 +202,15 @@ const FAQ = () => {
                     </div>
                 )}
 
-                {/* QUESTIONS PERSISTANTES EN BAS */}
+                {/* ACCORDÉONS DES QUESTIONS POPULAIRES */}
                 <div style={styles.popularSection}>
-                    <h2 style={styles.sectionTitle}>Questions les plus fréquentes</h2>
+                    <h2 style={styles.sectionTitle} className="responsive-section-title">Questions les plus fréquentes</h2>
                     <div style={styles.faqWrapper}>
                         {popularQuestions.map((item, index) => (
-                            <details key={index} style={styles.item}>
-                                <summary style={styles.summary}>{item.q} <ChevronDown size={18} /></summary>
+                            <details key={index} style={styles.item} className="faq-details">
+                                <summary style={styles.summary}>
+                                    {item.q} <ChevronDown size={18} className="chevron-icon" />
+                                </summary>
                                 <div style={styles.answer}>{item.a}</div>
                             </details>
                         ))}
@@ -178,39 +221,84 @@ const FAQ = () => {
     );
 };
 
+// --- DESIGN SYSTEM DES STYLES EN LIGNE ---
 const styles = {
-    container: { padding: '20px 5%', background: '#f8fafc', minHeight: '100vh', fontFamily: 'sans-serif' },
-    topBar: { marginBottom: '20px' },
-    logo: { height: '50px', cursor: 'pointer', borderRadius: '8px' },
-    content: { maxWidth: '1100px', margin: '0 auto' },
+    container: { margin: '0 auto', fontFamily: 'Segoe UI, Roboto, Helvetica, Arial, sans-serif', boxSizing: 'border-box' },
+    topBar: { marginBottom: '20px', display: 'flex', justifyContent: 'flex-start' },
+    logo: { height: '45px', cursor: 'pointer', borderRadius: '8px' },
     heroSection: { display: 'flex', alignItems: 'center', gap: '40px', marginBottom: '40px' },
-    imageWrapper: { flex: 1 },
-    heroImage: { width: '100%', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' },
+    imageWrapper: { flex: 1, minWidth: '280px' },
+    heroImage: { width: '100%', height: 'auto', borderRadius: '20px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)' },
     textWrapper: { flex: 1 },
-    title: { fontSize: '38px', color: '#1e293b', margin: 0 },
-    subtitle: { fontSize: '18px', color: '#64748b' },
-    gridContainer: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '15px', marginBottom: '50px' },
-    categoryCard: { padding: '25px 10px', borderRadius: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer', transition: '0.3s', border: '1px solid #e2e8f0' },
-    categoryTitle: { fontSize: '13px', fontWeight: 'bold', marginTop: '10px' },
-    detailsContainer: { background: 'white', padding: '40px', borderRadius: '25px', border: '1px solid #e2e8f0', marginBottom: '50px' },
-    backBtn: { display: 'flex', alignItems: 'center', gap: '8px', background: '#f1f5f9', border: 'none', padding: '10px 15px', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold', marginBottom: '30px' },
-    detailsFlex: { display: 'flex', gap: '50px', flexWrap: 'wrap' },
-    sidebar: { flex: '0 0 220px' },
-    sidebarTitle: { borderBottom: '2px solid #39b54a', paddingBottom: '10px', marginBottom: '15px' },
-    sidebarLink: { display: 'block', color: '#39b54a', textDecoration: 'none', marginBottom: '12px', fontSize: '14px', fontWeight: '500' },
+    title: { fontWeights: '800', color: '#0f172a', margin: 0 },
+    subtitle: { fontSize: '16px', color: '#64748b', marginTop: '10px', lineHeight: '1.5' },
+    
+    gridContainer: { display: 'grid', gap: '15px', marginBottom: '50px' },
+    categoryCard: { padding: '20px 15px', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', cursor: 'pointer', transition: 'all 0.25s ease', border: '1px solid #e2e8f0', boxSizing: 'border-box' },
+    categoryTitle: { fontSize: '13px', fontWeight: '700', marginTop: '12px', lineHeight: '1.3' },
+    
+    detailsContainer: { background: 'white', borderRadius: '24px', border: '1px solid #e2e8f0', marginBottom: '50px', boxSizing: 'border-box' },
+    backBtn: { display: 'flex', alignItems: 'center', gap: '8px', background: '#f1f5f9', border: 'none', padding: '10px 16px', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', color: '#475569', marginBottom: '30px', fontSize: '14px' },
+    detailsFlex: { display: 'flex', gap: '40px' },
+    sidebar: { flex: '0 0 240px' },
+    sidebarTitle: { borderBottom: '2px solid #39b54a', paddingBottom: '8px', marginBottom: '15px', fontSize: '16px', fontWeight: '800', color: '#0f172a' },
+    sidebarLink: { display: 'block', color: '#39b54a', textDecoration: 'none', marginBottom: '12px', fontSize: '14px', fontWeight: '600', lineHeight: '1.4' },
     mainDetailContent: { flex: 1 },
-    detailMainTitle: { fontSize: '28px', color: '#1e293b' },
-    introText: { color: '#64748b', fontStyle: 'italic', marginBottom: '30px' },
-    questionSection: { marginBottom: '40px', borderBottom: '1px solid #f1f5f9', paddingBottom: '20px' },
-    questionTitle: { color: '#1e293b', fontSize: '20px' },
-    questionText: { color: '#475569', lineHeight: '1.6' },
-    loginLink: { color: '#39b54a', fontWeight: 'bold', fontSize: '13px', textDecoration: 'none' },
-    popularSection: { borderTop: '2px solid #e2e8f0', paddingTop: '40px' },
-    sectionTitle: { textAlign: 'center', marginBottom: '30px' },
+    detailMainTitle: { fontSize: '26px', color: '#0f172a', fontWeight: '800', margin: '0 0 10px 0' },
+    introText: { color: '#64748b', fontStyle: 'italic', marginBottom: '30px', fontSize: '15px' },
+    questionSection: { marginBottom: '35px', borderBottom: '1px solid #f1f5f9', paddingBottom: '25px' },
+    questionTitle: { color: '#0f172a', fontSize: '18px', fontWeight: '700', margin: '0 0 12px 0' },
+    questionText: { color: '#475569', lineHeight: '1.6', fontSize: '15px', margin: '0 0 12px 0' },
+    loginLink: { color: '#39b54a', fontWeight: '700', fontSize: '13px', textDecoration: 'none' },
+    
+    popularSection: { borderTop: '2px solid #e2e8f0', paddingTop: '50px', marginBottom: '50px' },
+    sectionTitle: { color: '#0f172a', fontWeight: '800', textAlign: 'center', marginBottom: '30px' },
     faqWrapper: { maxWidth: '800px', margin: '0 auto' },
-    item: { background: 'white', padding: '15px', borderRadius: '12px', marginBottom: '10px', border: '1px solid #e2e8f0' },
-    summary: { fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', cursor: 'pointer' },
-    answer: { marginTop: '10px', color: '#64748b', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }
+    item: { background: 'white', padding: '18px', borderRadius: '14px', marginBottom: '12px', border: '1px solid #e2e8f0', transition: 'all 0.3s' },
+    summary: { fontWeight: '700', color: '#1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', listStyle: 'none' },
+    answer: { marginTop: '12px', color: '#475569', borderTop: '1px solid #f1f5f9', paddingTop: '12px', lineHeight: '1.6', fontSize: '15px' }
 };
+
+// --- CODE STYLE INJECTÉ POUR LA FLEXIBILITÉ DES ÉCRANS (CSS) ---
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = `
+/* Masquage des puces d'accordéon natifs */
+.faq-details summary::-webkit-details-marker { display: none; }
+.faq-details[open] .chevron-icon { transform: rotate(180deg); color: #39b54a; }
+.chevron-icon { transition: transform 0.2s ease; color: #64748b; }
+
+/* Écrans PC / Large Desktop */
+@media (min-width: 992px) {
+    .responsive-container { padding: 40px 10% 80px 10%; maxWidth: 1400px; }
+    .responsive-grid { grid-template-columns: repeat(4, 1fr); }
+    .responsive-main-title { font-size: 42px; }
+    .responsive-section-title { font-size: 32px; }
+    .responsive-details-padding { padding: 45px; }
+}
+
+/* Tablettes / Moyen écran */
+@media (min-width: 768px) and (max-width: 991px) {
+    .responsive-container { padding: 30px 5% 60px 5%; }
+    .responsive-grid { grid-template-columns: repeat(3, 1fr); }
+    .responsive-main-title { font-size: 34px; }
+    .responsive-section-title { font-size: 28px; }
+    .responsive-details-padding { padding: 30px; }
+}
+
+/* Smartphones / Petits formats */
+@media (max-width: 767px) {
+    .responsive-container { padding: 20px 20px 50px 20px; }
+    .responsive-hero { flex-direction: column; gap: 20px; text-align: center; }
+    .responsive-text-center { display: flex; flexDirection: column; align-items: center; }
+    .responsive-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .responsive-main-title { font-size: 28px; }
+    .responsive-section-title { font-size: 22px; }
+    .responsive-details-padding { padding: 20px; }
+    .responsive-details-flex { flex-direction: column; gap: 25px; }
+    .responsive-sidebar { flex: 1; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
+}
+`;
+document.head.appendChild(styleSheet);
 
 export default FAQ;

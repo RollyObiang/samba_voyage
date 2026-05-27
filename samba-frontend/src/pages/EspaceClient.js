@@ -33,15 +33,11 @@ const EspaceClient = () => {
             const data = await response.json();
 
             if (data.success) {
-                // CORRECTION : On récupère le nom et prénom depuis la nouvelle structure de données
                 const clientNomComplet = `${data.client.prenom} ${data.client.nom}`;
                 
-                // On enregistre les infos dans le localStorage pour les utiliser sur le Dashboard
                 localStorage.setItem('clientConnecte', JSON.stringify(data.client));
                 
                 alert(`Bienvenue ${clientNomComplet} !`);
-                
-                // On active la redirection
                 navigate('/dashboard-client'); 
             } else {
                 alert(data.message);
@@ -53,14 +49,14 @@ const EspaceClient = () => {
     };
 
     return (
-        <div style={styles.splitLayout}>
-            {/* --- PARTIE GAUCHE : RÉCAPITULATIF --- */}
-            <div style={styles.leftPanel}>
+        <div style={styles.splitLayout} className="responsive-layout">
+            {/* --- PARTIE GAUCHE : RÉCAPITULATIF OU LOGO --- */}
+            <div style={styles.leftPanel} className="responsive-panel panel-left">
                 {estNouveau ? (
                     <>
                         <div style={styles.successHeader}>
                             <CheckCircle size={50} color="#39b54a" />
-                            <h1 style={styles.mainTitle}>Félicitations !</h1>
+                            <h1 style={styles.mainTitle} className="responsive-title">Félicitations !</h1>
                             <p style={styles.subTitle}>Votre compte Samba Voyage est prêt.</p>
                         </div>
 
@@ -71,39 +67,39 @@ const EspaceClient = () => {
                             </div>
                             <div style={styles.dataContent}>
                                 <p><strong>Client :</strong> {nouveauClientData?.souscripteur_nom}</p>
-                                <p><strong>N° Police :</strong> <span style={{color: '#e11d48'}}>{numPolice}</span></p>
+                                <p><strong>N° Police :</strong> <span style={{color: '#e11d48', fontWeight: '700'}}>{numPolice}</span></p>
                                 <p><strong>Destination :</strong> {nouveauClientData?.destination}</p>
                                 <p><strong>Montant payé :</strong> {nouveauClientData?.montant} FCFA</p>
                             </div>
                             <div style={styles.idReminder}>
-                                <p style={{fontSize: '12px', margin: '0 0 5px 0'}}>VOTRE IDENTIFIANT DE CONNEXION :</p>
+                                <p style={{fontSize: '12px', margin: '0 0 5px 0', fontWeight: '700', color: '#475569'}}>VOTRE IDENTIFIANT DE CONNEXION :</p>
                                 <div style={styles.idBadge}>{nouveauClientData?.identifiant_client}</div>
-                                <p style={{fontSize: '10px', marginTop: '10px', color: '#64748b'}}>
+                                <p style={{fontSize: '11px', marginTop: '10px', color: '#64748b'}}>
                                     Mot de passe par défaut : <strong>Password1234</strong>
                                 </p>
                             </div>
                         </div>
                     </>
                 ) : (
-                    <div style={{textAlign: 'center'}}>
-                        <img src={logoSamba} style={{width: '150px', marginBottom: '20px', borderRadius: '10px'}} alt="Samba" />
-                        <h2>Bienvenue sur votre portail</h2>
-                        <p>Gérez vos contrats en toute simplicité.</p>
+                    <div style={{textAlign: 'center', width: '100%'}}>
+                        <img src={logoSamba} style={styles.centerLogo} alt="Samba" />
+                        <h2 style={{color: '#1e293b', fontWeight: '800', margin: '10px 0'}}>Bienvenue sur votre portail</h2>
+                        <p style={{color: '#64748b', margin: 0}}>Gérez vos contrats en toute simplicité.</p>
                     </div>
                 )}
             </div>
 
             {/* --- PARTIE DROITE : FORMULAIRE DE CONNEXION --- */}
-            <div style={styles.rightPanel}>
+            <div style={styles.rightPanel} className="responsive-panel panel-right">
                 <div style={styles.loginContainer}>
                     <div style={styles.loginHeader}>
-                        <h2 style={{margin: 0}}>Connexion</h2>
-                        <p style={{fontSize: '14px', color: '#64748b'}}>Accédez à vos données personnelles</p>
+                        <h2 style={{margin: '0 0 6px 0', fontWeight: '800', color: '#1e293b', fontSize: '26px'}}>Connexion</h2>
+                        <p style={{fontSize: '14px', color: '#64748b', margin: 0}}>Accédez à vos données personnelles</p>
                     </div>
 
                     <form style={styles.form} onSubmit={handleLogin}>
                         <div style={styles.inputBox}>
-                            <User size={20} color="#94a3b8" />
+                            <User size={20} color="#94a3b8" style={{ flexShrink: 0 }} />
                             <input 
                                 type="text" 
                                 placeholder="Identifiant" 
@@ -114,7 +110,7 @@ const EspaceClient = () => {
                         </div>
 
                         <div style={styles.inputBox}>
-                            <Lock size={20} color="#94a3b8" />
+                            <Lock size={20} color="#94a3b8" style={{ flexShrink: 0 }} />
                             <input 
                                 type="password" 
                                 placeholder="Mot de passe" 
@@ -138,8 +134,9 @@ const EspaceClient = () => {
     );
 };
 
+// --- DESIGN SYSTEM DES STYLES EN LIGNE (PC PAR DÉFAUT) ---
 const styles = {
-    splitLayout: { display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden', fontFamily: 'Segoe UI, sans-serif' },
+    splitLayout: { display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden', fontFamily: 'Segoe UI, Roboto, sans-serif', boxSizing: 'border-box' },
     leftPanel: { 
         flex: 1, 
         background: '#ffffff', 
@@ -147,24 +144,64 @@ const styles = {
         flexDirection: 'column', 
         justifyContent: 'center', 
         padding: '5%',
-        borderRight: '1px solid #f1f5f9'
+        borderRight: '1px solid #f1f5f9',
+        boxSizing: 'border-box',
+        overflowY: 'auto'
     },
-    successHeader: { marginBottom: '30px' },
-    mainTitle: { fontSize: '32px', color: '#1e293b', margin: '10px 0' },
-    subTitle: { fontSize: '18px', color: '#64748b' },
-    dataCard: { background: '#f8fafc', borderRadius: '20px', padding: '30px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' },
-    cardHeader: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 'bold', color: '#39b54a', marginBottom: '20px', letterSpacing: '1px' },
-    dataContent: { fontSize: '15px', color: '#334155', lineHeight: '1.8' },
-    idReminder: { marginTop: '25px', paddingTop: '20px', borderTop: '1px solid #e2e8f0', textAlign: 'center' },
-    idBadge: { background: '#39b54a', color: 'white', padding: '10px 20px', borderRadius: '10px', fontSize: '24px', fontWeight: 'bold', display: 'inline-block' },
-    rightPanel: { flex: 1, background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    loginContainer: { width: '100%', maxWidth: '400px', padding: '20px' },
-    loginHeader: { marginBottom: '30px', textAlign: 'center' },
-    form: { display: 'flex', flexDirection: 'column', gap: '20px' },
-    inputBox: { display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '15px', borderRadius: '12px', border: '1px solid #cbd5e1' },
-    inputField: { border: 'none', outline: 'none', width: '100%', fontSize: '16px' },
-    btnSubmit: { background: '#1e293b', color: 'white', border: 'none', padding: '18px', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', transition: '0.3s' },
-    btnBack: { background: 'none', border: 'none', color: '#64748b', marginTop: '20px', cursor: 'pointer', textDecoration: 'underline', width: '100%' }
+    successHeader: { marginBottom: '25px' },
+    mainTitle: { color: '#1e293b', margin: '10px 0 5px 0', fontWeight: '800' },
+    subTitle: { fontSize: '16px', color: '#64748b', margin: 0 },
+    dataCard: { background: '#f8fafc', borderRadius: '20px', padding: '25px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' },
+    cardHeader: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '11px', fontWeight: '800', color: '#39b54a', marginBottom: '15px', letterSpacing: '0.5px' },
+    dataContent: { fontSize: '14px', color: '#334155', lineHeight: '1.8' },
+    idReminder: { marginTop: '20px', paddingTop: '15px', borderTop: '1px solid #e2e8f0', textAlign: 'center' },
+    idBadge: { background: '#39b54a', color: 'white', padding: '8px 20px', borderRadius: '10px', fontSize: '22px', fontWeight: '800', display: 'inline-block', letterSpacing: '0.5px' },
+    centerLogo: { width: '140px', marginBottom: '15px', borderRadius: '12px', boxShadow: '0 4px 10px rgba(0,0,0,0.03)' },
+    
+    rightPanel: { flex: 1, background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', boxSizing: 'border-box', overflowY: 'auto' },
+    loginContainer: { width: '100%', maxWidth: '380px', background: 'transparent' },
+    loginHeader: { marginBottom: '25px', textAlign: 'center' },
+    form: { display: 'flex', flexDirection: 'column', gap: '16px' },
+    inputBox: { display: 'flex', alignItems: 'center', gap: '12px', background: 'white', padding: '14px 16px', borderRadius: '12px', border: '1px solid #cbd5e1', transition: 'border-color 0.2s' },
+    inputField: { border: 'none', outline: 'none', width: '100%', fontSize: '15px', color: '#1e293b' },
+    btnSubmit: { background: '#1e293b', color: 'white', border: 'none', padding: '16px', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', transition: 'background-color 0.2s', fontSize: '15px' },
+    btnBack: { background: 'none', border: 'none', color: '#64748b', marginTop: '20px', cursor: 'pointer', textDecoration: 'underline', width: '100%', fontSize: '14px', fontWeight: '500' }
 };
+
+// --- CODE STYLE CSS INJECTÉ POUR LE RESPONSIVE MOBILE ---
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = `
+/* Styles spécifiques pour grands écrans */
+@media (min-width: 768px) {
+    .responsive-title { font-size: 36px; }
+}
+
+/* Bascule responsive pour Tablettes et Smartphones */
+@media (max-width: 767px) {
+    .responsive-layout {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow: -webkit-paged-x !important; /* Nettoyage scroll */
+    }
+    .responsive-panel {
+        flex: none !important;
+        width: 100% !important;
+    }
+    .panel-left {
+        padding: 40px 24px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+    .panel-right {
+        padding: 40px 24px 60px 24px !important;
+        background-color: #f8fafc !important; /* Adoucissement du fond gris sur mobile */
+    }
+    .responsive-title {
+        font-size: 28px !important;
+    }
+}
+`;
+document.head.appendChild(styleSheet);
 
 export default EspaceClient;

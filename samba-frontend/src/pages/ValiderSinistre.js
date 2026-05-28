@@ -13,7 +13,7 @@ const ValiderSinistre = () => {
     const [sending, setSending] = useState(false);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/contrats/sinistre/${id}`)
+        fetch(`https://sambavoyage.vercel.app/api/contrats/sinistre/${id}`) 
             .then(res => res.json())
             .then(data => {
                 setSinistre(data);
@@ -45,7 +45,7 @@ const ValiderSinistre = () => {
         }
 
         try {
-            const res = await fetch(`http://localhost:3000/api/contrats/valider-sinistre/${id}`, {
+            const res = await fetch(`https://sambavoyage.vercel.app/api/contrats/valider-sinistre/${id}`, {
                 method: 'PUT',
                 // Note: Ne pas mettre 'Content-Type' header quand on utilise FormData
                 body: formData 

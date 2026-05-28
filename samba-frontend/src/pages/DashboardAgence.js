@@ -116,11 +116,11 @@ const ListeContrats = () => {
 
     const chargerDonnees = async () => {
         try {
-            const resC = await fetch('http://localhost:3000/api/contrats/dashboard-agence');
+            const resC = await fetch('https://sambavoyage.vercel.app/api/contrats/dashboard-agence');
             const dataC = await resC.json();
             setContrats(Array.isArray(dataC) ? dataC : []);
 
-            const resS = await fetch('http://localhost:3000/api/contrats/liste-sinistres');
+            const resS = await fetch('https://sambavoyage.vercel.app/api/contrats/liste-sinistres');
             const dataS = await resS.json();
             
             if (Array.isArray(dataS)) {

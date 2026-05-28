@@ -124,7 +124,7 @@ const DashboardClient = () => {
     }, [navigate]);
 
     const chargerContratsClient = (clientData) => {
-        fetch('http://localhost:3000/api/contrats/dashboard-agence')
+        fetch('https://sambavoyage.vercel.app/api/contrats/dashboard-agence')
             .then(res => res.json())
             .then(data => {
                 const filtrés = data.filter(c => 
@@ -137,7 +137,7 @@ const DashboardClient = () => {
     };
 
     const chargerSinistresClient = (clientData) => {
-        fetch('http://localhost:3000/api/contrats/liste-sinistres')
+        fetch('https://sambavoyage.vercel.app/api/contrats/liste-sinistres')
             .then(res => res.json())
             .then(data => {
                 const filtrés = data.filter(s => 

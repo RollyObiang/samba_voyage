@@ -57,8 +57,8 @@ const AdminSamba = () => {
     if(e) e.preventDefault();
     try {
       const url = sourceView === 'sinistres' 
-        ? `http://localhost:3000/api/contrats/sinistres/${editForm.id}`
-        : `http://localhost:3000/api/contrats/${editForm.id}`;
+        ? `https://sambavoyage.vercel.app/api/contrats/sinistres/${editForm.id}`
+        : `https://sambavoyage.vercel.app/api/contrats/${editForm.id}`;
 
       const res = await fetch(url, {
         method: 'PUT',
@@ -82,8 +82,8 @@ const AdminSamba = () => {
     if (window.confirm(`Voulez-vous vraiment supprimer ce ${type === 'sinistres' ? 'sinistre' : 'contrat'} ?`)) {
       try {
         const url = type === 'sinistres' 
-          ? `http://localhost:3000/api/contrats/sinistres/${id}`
-          : `http://localhost:3000/api/contrats/${id}`;
+          ? `https://sambavoyage.vercel.app/api/contrats/sinistres/${id}`
+          : `https://sambavoyage.vercel.app/api/contrats/${id}`;
           
         const res = await fetch(url, { method: 'DELETE' });
         if (res.ok) fetchData();
@@ -95,7 +95,7 @@ const AdminSamba = () => {
   const deletePartner = async (id) => {
     if (window.confirm("Voulez-vous vraiment supprimer ce partenaire ?")) {
       try {
-        const res = await fetch(`http://localhost:3000/api/auth/utilisateurs/${id}`, {
+        const res = await fetch(`https://sambavoyage.vercel.app/api/auth/utilisateurs/${id}`, {
           method: 'DELETE'
         });
         if (res.ok) fetchData();
@@ -115,9 +115,9 @@ const AdminSamba = () => {
     setLoading(true);
     try {
       const [resC, resS, resU] = await Promise.all([
-        fetch('http://localhost:3000/api/contrats/dashboard-agence'),
-        fetch('http://localhost:3000/api/contrats/liste-sinistres'),
-        fetch('http://localhost:3000/api/auth/utilisateurs')
+        fetch('https://sambavoyage.vercel.app/api/contrats/dashboard-agence'),
+        fetch('https://sambavoyage.vercel.app/api/contrats/liste-sinistres'),
+        fetch('https://sambavoyage.vercel.app/api/auth/utilisateurs')
       ]);
       const contrats = await resC.json();
       const sinistres = await resS.json();

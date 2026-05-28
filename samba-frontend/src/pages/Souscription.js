@@ -78,7 +78,7 @@ const Souscription = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/api/contrats/creer', {
+            const response = await fetch('https://sambavoyage.vercel.app/api/contrats/creer', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(contratData),

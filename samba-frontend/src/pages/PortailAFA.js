@@ -10,7 +10,7 @@ const PortailAFA = () => {
     const navigate = useNavigate();
 
     const chargerDonnees = () => {
-        fetch('http://localhost:3000/api/contrats/liste-sinistres')
+        fetch('https://sambavoyage.vercel.app/api/contrats/liste-sinistres')
             .then(res => res.json())
             .then(data => {
                 setSinistres(Array.isArray(data) ? data : []);
@@ -33,13 +33,13 @@ const PortailAFA = () => {
         let messageSucces = '';
 
         if (action === 'INFOS') {
-            url = `http://localhost:3000/api/contrats/valider-sinistre/${id}`;
+            url = `https://sambavoyage.vercel.app/api/contrats/valider-sinistre/${id}`;
             messageSucces = "✅ Demande d'informations envoyée !";
         } else if (action === 'REFUSER') {
-            url = `http://localhost:3000/api/contrats/rejeter-sinistre/${id}`;
+            url = `https://sambavoyage.vercel.app/api/contrats/rejeter-sinistre/${id}`;
             messageSucces = "🚫 Sinistre rejeté.";
         } else if (action === 'CONFIRMER') {
-            url = `http://localhost:3000/api/contrats/valider-paiement/${id}`; 
+            url = `https://sambavoyage.vercel.app/api/contrats/valider-paiement/${id}`; 
             messageSucces = "💰 Paiement confirmé !";
         }
 
@@ -126,7 +126,7 @@ const PortailAFA = () => {
                                 <Paperclip size={18} color="#0070bb" />
                                 <strong>Document joint :</strong>
                             </div>
-                            <a href={`http://localhost:3000/${dossierSelectionne.justificatif_url}`} target="_blank" rel="noreferrer" style={styles.linkFile}>
+                            <a href={`https://sambavoyage.vercel.app/${dossierSelectionne.justificatif_url}`} target="_blank" rel="noreferrer" style={styles.linkFile}>
                                 <ExternalLink size={14} /> Consulter la pièce jointe
                             </a>
                         </div>

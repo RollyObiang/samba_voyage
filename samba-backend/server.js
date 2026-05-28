@@ -23,21 +23,25 @@ app.use((req, res, next) => {
 });
 
 // --- AJOUT : TEST DE SURVIE DIRECT ---
-// Si tu tapes http://localhost:3000/test-serveur et que ça marche, le serveur est OK.
 app.get('/test-serveur', (req, res) => {
-    res.send("✅ Le serveur principal répond parfaitement !");
+    res.send("✅ Le serveur principal répond parfaitement sur Vercel !");
 });
 
 // 4. DÉCLARATION DES ROUTES API
 app.use('/api/contrats', contratRoutes); 
 app.use('/api/auth', authRoutes); 
 
-// 5. LANCEMENT DU SERVEUR
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`-------------------------------------------`);
-    console.log(`✅ SERVEUR SAMBA-VOYAGE ACTIF SUR LE PORT ${PORT}`);
-    console.log(`📂 Dossier uploads : /uploads [PRÊT]`);
-    console.log(`🔑 Système d'authentification : [ACTIF]`);
-    console.log(`-------------------------------------------`);
-});
+// 5. LANCEMENT DU SERVEUR (UNIQUEMENT EN LOCAL)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`-------------------------------------------`);
+        console.log(`✅ SERVEUR SAMBA-VOYAGE ACTIF SUR LE PORT ${PORT}`);
+        console.log(`📂 Dossier uploads : /uploads [PRÊT]`);
+        console.log(`🔑 Système d'authentification : [ACTIF]`);
+        console.log(`-------------------------------------------`);
+    });
+}
+
+// --- CONFIGURATION REQUIS POUR VERCEL ---
+module.exports = app;

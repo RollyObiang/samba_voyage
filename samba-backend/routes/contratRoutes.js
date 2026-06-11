@@ -5,21 +5,41 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../config/db'); // On utilise 'db' comme import principal
 
-// --- 1. CONFIGURATION DOSSIER UPLOADS ---
+// --- 1. CONFIGURATION DOSSIER UPLOADS (CORRIGÉE POUR VERCEL) ---
 const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
+// On ne tente de créer le dossier que si on n'est PAS sur VERCEL (en production)
+if (process.env.NODE_ENV !== 'production' && !fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// --- 2. CONFIGURATION MULTER ---
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => { cb(null, uploadDir); },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// --- 2. CONFIGURATION MULTER (AJUSTÉE POUR LA PRODUCTION) ---
+let storage;
+
+if (process.env.NODE_ENV === 'production') {
+    // Sur Vercel, on garde le fichier en mémoire vive pour éviter l'erreur EROFS (Lecture seule)
+    storage = multer.memoryStorage();
+} else {
+    // En local sur ton ordinateur, on continue d'enregistrer physiquement dans le dossier uploads/
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => { cb(null, uploadDir); },
+        filename: (req, file, cb) => {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            cb(null, uniqueSuffix + path.extname(file.originalname));
+        }
+    });
+}
+
 const upload = multer({ storage: storage });
+
+// Fonction utilitaire pour gérer l'URL du fichier selon l'environnement
+const getFileUrl = (req) => {
+    if (!req.file) return null;
+    if (process.env.NODE_ENV === 'production') {
+        // En production sans stockage cloud (S3/Cloudinary), on simule un lien temporaire ou fictif
+        return `memfs://` + req.file.originalname;
+    }
+    return req.file.path.replace(/\\/g, '/');
+};
 
 // ==========================================
 // --- 3. ROUTES POUR LES CONTRATS ---
@@ -55,7 +75,6 @@ router.post('/creer', async (req, res) => {
 // --- DASHBOARD AGENCE (Indispensable pour ListeContrats.js) ---
 router.get('/dashboard-agence', async (req, res) => {
     try {
-        // On s'assure de renvoyer les colonnes que React attend
         const result = await db.query('SELECT * FROM polices_assurance ORDER BY id DESC');
         res.json(result.rows);
     } catch (err) {
@@ -108,19 +127,15 @@ router.get('/sinistre/:id', async (req, res) => {
     }
 });
 
-// --- 4c. MISE À JOUR DU STATUT AVEC GESTION DE FICHIER (VERSION CORRIGÉE) ---
-// On ajoute upload.single('document') pour que multer puisse lire le FormData
+// --- 4c. MISE À JOUR DU STATUT AVEC GESTION DE FICHIER ---
 router.put('/valider-sinistre/:id', upload.single('document'), async (req, res) => {
     const { id } = req.params;
     const { nouveauStatut, commentaire } = req.body; 
     
-    // Si un nouveau fichier est envoyé, on récupère son chemin
-    const justificatif_url = req.file ? req.file.path.replace(/\\/g, '/') : null;
+    const justificatif_url = getFileUrl(req);
 
     try {
         const statutFinal = nouveauStatut || 'ATTENTE_AFA';
-
-        // Mise à jour du statut et du commentaire (et du fichier si présent)
         let sql;
         let params;
 
@@ -128,7 +143,6 @@ router.put('/valider-sinistre/:id', upload.single('document'), async (req, res) 
             sql = "UPDATE sinistres SET statut = $1, description = $2, justificatif_url = $3 WHERE id = $4";
             params = [statutFinal, commentaire, justificatif_url, id];
         } else {
-            // Si pas de nouveau fichier, on met juste à jour le statut et le commentaire (ou description)
             sql = "UPDATE sinistres SET statut = $1, description = $2 WHERE id = $3";
             params = [statutFinal, commentaire, id];
         }
@@ -147,16 +161,13 @@ router.put('/valider-sinistre/:id', upload.single('document'), async (req, res) 
     }
 });
 
-// --- AJOUTE LA ROUTE DE REJET ICI ---
+// --- ROUTE DE REJET ---
 router.put('/rejeter-sinistre/:id', async (req, res) => {
     const { id } = req.params;
     console.log(`🚫 Rejet du dossier ID: ${id}`);
-
     try {
-        // On change le statut en 'REJETE'
         const sql = "UPDATE sinistres SET statut = 'REJETE' WHERE id = $1";
         await db.query(sql, [id]);
-        
         res.json({ success: true, message: "Le sinistre a été rejeté par l'AFA" });
     } catch (err) {
         console.error("❌ Erreur SQL Rejet:", err.message);
@@ -164,11 +175,10 @@ router.put('/rejeter-sinistre/:id', async (req, res) => {
     }
 });
 
-// --- ROUTE POUR VALIDER LE PAIEMENT (BOUTON CONFIRMER) ---
+// --- ROUTE POUR VALIDER LE PAIEMENT ---
 router.put('/valider-paiement/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        // On met 'APPROUVE' en majuscules pour la base de données
         await db.query("UPDATE sinistres SET statut = 'APPROUVE' WHERE id = $1", [id]);
         res.json({ success: true, message: "Dossier approuvé et payé" });
     } catch (err) {
@@ -179,7 +189,7 @@ router.put('/valider-paiement/:id', async (req, res) => {
 // --- DÉCLARER UN SINISTRE ---
 router.post('/declarer-sinistre', upload.single('justificatif'), async (req, res) => {
     const { police_id, nom_client, type_incident, description, latitude, longitude, identifiant_client } = req.body;
-    const justificatif_url = req.file ? req.file.path.replace(/\\/g, '/') : null;
+    const justificatif_url = getFileUrl(req);
     try {
         const result = await db.query(
             `INSERT INTO sinistres (police_id, nom_client, type_incident, description, justificatif_url, latitude, longitude, statut, identifiant_client) 
@@ -201,7 +211,6 @@ router.get('/admin/stats', async (req, res) => {
                 (SELECT COUNT(*) FROM polices_assurance) as "totalPolices",
                 (SELECT COUNT(*) FROM sinistres WHERE statut = 'OUVERT') as "alertesSinistres"
         `);
-        // On renvoie 0 si le CA est null (pour éviter les erreurs d'affichage)
         const data = stats.rows[0];
         data.totalCA = data.totalCA || 0;
         res.json(data);
@@ -230,27 +239,20 @@ router.get('/clients', async (req, res) => {
     }
 });
 
-
-// --- MISE À JOUR D'UN CONTRAT (Appelé par la modale Admin) ---
+// --- MISE À JOUR D'UN CONTRAT ---
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    // On récupère les champs envoyés par React
     const { souscripteur_nom, nom_client, montant, statut } = req.body;
-    
     try {
         const sql = `
             UPDATE polices_assurance 
             SET souscripteur_nom = $1, montant = $2, statut_police = $3 
             WHERE id = $4 
             RETURNING *`;
-        
-        // On prend soit souscripteur_nom soit nom_client (selon ce qui est rempli)
         const result = await db.query(sql, [souscripteur_nom || nom_client, montant, statut, id]);
-
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Contrat non trouvé" });
         }
-
         console.log(`✅ Contrat ${id} mis à jour`);
         res.json({ success: true, data: result.rows[0] });
     } catch (err) {
@@ -259,13 +261,10 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-
-// --- MISE À JOUR D'UN SINISTRE (Correction : Colonnes réelles) ---
+// --- MISE À JOUR D'UN SINISTRE ---
 router.put('/sinistres/:id', async (req, res) => {
     const { id } = req.params;
-    // On récupère les champs qui existent vraiment dans ta table
     const { statut, description, justificatif_url, nom_client } = req.body;
-
     try {
         const sql = `
             UPDATE sinistres 
@@ -275,21 +274,11 @@ router.put('/sinistres/:id', async (req, res) => {
                 nom_client = $4
             WHERE id = $5 
             RETURNING *`;
-
-        const params = [
-            statut, 
-            description || '', 
-            justificatif_url || null, 
-            nom_client,
-            id
-        ];
-
+        const params = [statut, description || '', justificatif_url || null, nom_client, id];
         const result = await db.query(sql, params);
-
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Sinistre non trouvé" });
         }
-
         console.log(`✅ Sinistre ${id} mis à jour (Statut & Description)`);
         res.json({ success: true, data: result.rows[0] });
     } catch (err) {
@@ -297,6 +286,5 @@ router.put('/sinistres/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
 
 module.exports = router;

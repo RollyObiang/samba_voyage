@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-    Shield, Plane, PhoneCall, ChevronRight, LayoutDashboard, Search, 
-    ShieldCheck, X, Info, CheckCircle2, ArrowRight as LucideArrowRight, MapPin 
+import {
+    Shield, Plane, PhoneCall, ChevronRight, LayoutDashboard, Search,
+    ShieldCheck, X, Info, CheckCircle2, ArrowRight as LucideArrowRight, MapPin
 } from 'lucide-react';
 
 // Import de ton nouveau composant Navbar global
-import Navbar from '../components/Navbar'; 
+import Navbar from '../components/Navbar';
 
 import imgSambaHero from '../assets/img1.jpg';
 
@@ -22,7 +22,7 @@ import imgBurkinaFaso from '../assets/burkina1.jpg';
 
 const Accueil = () => {
     const navigate = useNavigate();
-    
+
     const [hoveredCard, setHoveredCard] = useState(null);
     const [hoverBtnHero, setHoverBtnHero] = useState(false);
 
@@ -76,40 +76,40 @@ const Accueil = () => {
     ];
 
     const toutesDestinations = [
-        { 
-            id: 1, pays: 'GABON', zone: 'Afrique (CIMA)', img: imgGabon, 
+        {
+            id: 1, pays: 'GABON', zone: 'Afrique (CIMA)', img: imgGabon,
             capital: 'Libreville',
-            desc: "Joyau de l'Afrique Centrale, le Gabon est couvert à 85% par la forêt tropicale. Bien que Libreville offre des infrastructures correctes, un déplacement vers Port-Gentil ou les parcs nationaux nécessite une vigilance sanitaire accrue, Le Gabon s’affirme comme le poumon stratégique de l’Afrique Centrale, où l’exploitation responsable des ressources rencontre une ambition écologique sans précédent, Au-delà de sa capitale Libreville, le pays déploie un potentiel industriel unique via la Zone Économique Spéciale de Nkok, tout en préservant son identityé de Berceau de l'humanité grâce à ses treize parcs nationaux classés.", 
+            desc: "Joyau de l'Afrique Centrale, le Gabon est couvert à 85% par la forêt tropicale. Bien que Libreville offre des infrastructures correctes, un déplacement vers Port-Gentil ou les parcs nationaux nécessite une vigilance sanitaire accrue, Le Gabon s’affirme comme le poumon stratégique de l’Afrique Centrale, où l’exploitation responsable des ressources rencontre une ambition écologique sans précédent, Au-delà de sa capitale Libreville, le pays déploie un potentiel industriel unique via la Zone Économique Spéciale de Nkok, tout en préservant son identityé de Berceau de l'humanité grâce à ses treize parcs nationaux classés.",
             pourquoi: "SAMBA VOYAGE garantit une prise en charge immédiate dans les meilleures cliniques de Libreville et organise votre évacuation sanitaire depuis les zones isolées.",
-            points: ["Évacuation sanitaire rapide", "Frais médicaux en clinique privée", "Assistance 24h/24"] 
+            points: ["Évacuation sanitaire rapide", "Frais médicaux en clinique privée", "Assistance 24h/24"]
         },
-        { 
-            id: 2, pays: 'SENEGAL', zone: 'Afrique (CIMA)', img: imgSenegal, 
+        {
+            id: 2, pays: 'SENEGAL', zone: 'Afrique (CIMA)', img: imgSenegal,
             capital: 'Dakar',
-            desc: "Le Sénégal attire pour Dakar et ses stations balnéaires. Les frais médicaux dans le secteur privé sont élevés pour les non-résidents. Porté par le Plan Sénégal Émergent (PSE), le pays transforme son paysage économique avec des projets d'envergure comme la ville nouvelle de Diamniadio.", 
+            desc: "Le Sénégal attire pour Dakar et ses stations balnéaires. Les frais médicaux dans le secteur privé sont élevés pour les non-résidents. Porté par le Plan Sénégal Émergent (PSE), le pays transforme son paysage économique avec des projets d'envergure comme la ville nouvelle de Diamniadio.",
             pourquoi: "Notre réseau à Dakar évite toute avance de frais hospitaliers lourds et couvre les incidents comme le vol de bagages.",
-            points: ["Zéro avance de frais", "Couverture vol de bagages", "Assistance juridique"] 
+            points: ["Zéro avance de frais", "Couverture vol de bagages", "Assistance juridique"]
         },
-        { 
-            id: 3, pays: 'COTE D\'IVOIRE', zone: 'Afrique (CIMA)', img: imgCoteIvoire, 
+        {
+            id: 3, pays: 'COTE D\'IVOIRE', zone: 'Afrique (CIMA)', img: imgCoteIvoire,
             capital: 'Abidjan',
-            desc: "Puissance économique régionale. Les risques liés au paludisme et aux accidents justifient une couverture solide. Avec le déploiement massif d'infrastructures telles que le troisième pont ou le métro d'Abidjan, le pays attire les sièges sociaux des plus grandes multinationales.", 
+            desc: "Puissance économique régionale. Les risques liés au paludisme et aux accidents justifient une couverture solide. Avec le déploiement massif d'infrastructures telles que le troisième pont ou le métro d'Abidjan, le pays attire les sièges sociaux des plus grandes multinationales.",
             pourquoi: "Accès garanti sans avance de frais aux établissements de référence comme la PISAM à Abidjan.",
-            points: ["Réseau cliniques VIP", "Protection Accidents", "Rapatriement express"] 
+            points: ["Réseau cliniques VIP", "Protection Accidents", "Rapatriement express"]
         },
-        { 
-            id: 4, pays: 'FRANCE', zone: 'Europe (France)', img: imgFrance, 
+        {
+            id: 4, pays: 'FRANCE', zone: 'Europe (France)', img: imgFrance,
             capital: 'Paris',
-            desc: "L'entrée dans l'espace Schengen impose une assurance voyage stricte avec une garantie minimale de 30 000 €. Au-delà de la simple formalité administrative pour l'obtention du visa, cette couverture doit impérativement include le rapatriement sanitaire.", 
+            desc: "L'entrée dans l'espace Schengen impose une assurance voyage stricte avec une garantie minimale de 30 000 €. Au-delà de la simple formalité administrative pour l'obtention du visa, cette couverture doit impérativement include le rapatriement sanitaire.",
             pourquoi: "Attestation 100% conforme aux exigences consulaires pour l'obtention de votre visa Schengen.",
-            points: ["Visa Schengen garanti", "Couverture 30 000 €", "Assistance rapatriement"] 
+            points: ["Visa Schengen garanti", "Couverture 30 000 €", "Assistance rapatriement"]
         },
-        { 
-            id: 5, pays: 'CAMEROUN', zone: 'Afrique (CIMA)', img: imgCameroun, 
+        {
+            id: 5, pays: 'CAMEROUN', zone: 'Afrique (CIMA)', img: imgCameroun,
             capital: 'Yaoundé',
-            desc: "Une grande diversité géographique qui nécessite une couverture pour les villes comme Douala et Yaoundé. Entre l'effervescence commerciale de Douala, poumon économique tourné vers l'Atlantique, et le calme institutionnel de Yaoundé.", 
+            desc: "Une grande diversité géographique qui nécessite une couverture pour les villes comme Douala et Yaoundé. Entre l'effervescence commerciale de Douala, poumon économique tourné vers l'Atlantique, et le calme institutionnel de Yaoundé.",
             pourquoi: "Connexion immédiate à notre plateforme d'assistance active sur tout le territoire camerounais.",
-            points: ["Urgence médicale CEMAC", "Assistance 24/7", "Avance de fonds"] 
+            points: ["Urgence médicale CEMAC", "Assistance 24/7", "Avance de fonds"]
         },
         { id: 6, pays: 'BENIN', zone: 'Afrique (CIMA)', img: imgBenin, capital: 'Cotonou', desc: "Destination culturelle puissante. Porté par une dynamique de réformes structurelles, le pays se transforme rapidement en un pôle touristique et économique majeur de l'Afrique de l'ouest.", pourquoi: "Protection contre les maladies tropicales et accidents.", points: ["Prise en charge Paludisme", "Rapatriement", "Perte de documents"] },
         { id: 7, pays: 'TOGO', zone: 'Afrique (CIMA)', img: imgTogo, capital: 'Lomé', desc: "Le Togo s'impose aujourd'hui comme l'escale d'affaires incontournable de l'Afrique de l'Est, portée par une vision stratégique qui transforme le pays en un véritable hub logistique et financier de premier plan.", pourquoi: "Assistance réactive à Lomé incluant la responsabilité civile.", points: ["Couverture médicale Lomé", "Responsabilité Civile", "Aide logistique"] },
@@ -127,9 +127,9 @@ const Accueil = () => {
                 <div className="marquee-text">FLASH INFO : SAMB'A VOYAGE renforce son réseau d'assistance avec Africa First Assist — 🛡️ Souscrivez en ligne en moins de 2 minutes — ✈️ Rappel : Votre attestation est disponible immédiatement après paiement.</div>
             </div>
 
-            <header className="hero-section" style={{...styles.hero, backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imgSambaHero})`}}>
+            <header className="hero-section" style={{ ...styles.hero, backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imgSambaHero})` }}>
                 <div className="animate-fade" style={styles.heroContent}>
-                    <h1 className="hero-title" style={styles.heroTitle}>Voyagez l'esprit tranquille avec <span style={{color: '#39b54a'}}> SAMB'A-VOYAGE </span></h1>
+                    <h1 className="hero-title" style={styles.heroTitle}>Voyagez l'esprit tranquille avec <span style={{ color: '#39b54a' }}> SAMB'A-VOYAGE </span></h1>
                     <p className="hero-subtitle" style={styles.heroSubtitle}>L'assurance voyage gabonaise qui vous accompagne partout dans le monde.</p>
                     <button onClick={() => navigate('/souscription')} onMouseEnter={() => setHoverBtnHero(true)} onMouseLeave={() => setHoverBtnHero(false)} style={{ ...styles.btnHero, transform: hoverBtnHero ? 'scale(1.05) translateY(-3px)' : 'scale(1)', boxShadow: hoverBtnHero ? '0 10px 20px rgba(57, 181, 74, 0.4)' : 'none', transition: 'all 0.3s ease' }}>SOUSCRIRE EN LIGNE <ChevronRight size={20} /></button>
                 </div>
@@ -145,16 +145,16 @@ const Accueil = () => {
                 ))}
             </section>
 
-            <section className="section-responsive" style={{...styles.section, background: '#fff'}}>
+            <section className="section-responsive" style={{ ...styles.section, background: '#fff' }}>
                 <div style={styles.sectionHeader}>
-                    <h2 className="section-title" style={{fontSize: '2rem', fontWeight: '800'}}>Découvrez les <span style={{color: '#39b54a'}}>destinations</span> populaires</h2>
-                    <p style={{color: '#64748b'}}>Nous couvrons toute la zone CIMA et la zone EUROPE.</p>
+                    <h2 className="section-title" style={{ fontSize: '2rem', fontWeight: '800' }}>Découvrez les <span style={{ color: '#39b54a' }}>destinations</span> populaires</h2>
+                    <p style={{ color: '#64748b' }}>Nous couvrons toute la zone CIMA et la zone EUROPE.</p>
                 </div>
-                
+
                 <div style={styles.destGrid}>
                     {destinationsAAfficher.map((d) => (
-                        <div 
-                            key={d.id} 
+                        <div
+                            key={d.id}
                             onMouseEnter={() => setHoverDest(d.id)}
                             onMouseLeave={() => setHoverDest(null)}
                             style={{
@@ -174,7 +174,7 @@ const Accueil = () => {
                 </div>
 
                 {!voirTout && (
-                    <div style={{textAlign: 'center', marginTop: '40px'}}>
+                    <div style={{ textAlign: 'center', marginTop: '40px' }}>
                         <button onClick={() => setVoirTout(true)} style={styles.btnVoirTout}>Voir toutes les destinations</button>
                     </div>
                 )}
@@ -184,52 +184,52 @@ const Accueil = () => {
             {paysSelectionne && (
                 <div className="modal-overlay" onClick={() => setPaysSelectionne(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button style={styles.closeBtn} onClick={() => setPaysSelectionne(null)}><X size={24}/></button>
-                        <div className="modal-header-img" style={{...styles.modalImgHeaderLarge, backgroundImage: `url(${paysSelectionne.img})`}}>
+                        <button style={styles.closeBtn} onClick={() => setPaysSelectionne(null)}><X size={24} /></button>
+                        <div className="modal-header-img" style={{ ...styles.modalImgHeaderLarge, backgroundImage: `url(${paysSelectionne.img})` }}>
                             <div className="modal-header-overlay" style={styles.modalImgOverlayLarge}>
-                                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                         <MapPin size={22} color="#39b54a" />
-                                        <span style={{background: '#39b54a', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase'}}>
+                                        <span style={{ background: '#39b54a', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>
                                             Destination {paysSelectionne.zone}
                                         </span>
                                     </div>
-                                    <h2 style={{fontSize: '2.5rem', margin: 0, fontWeight: '800', textShadow: '2px 2px 10px rgba(0,0,0,0.5)'}}>
+                                    <h2 style={{ fontSize: '2.5rem', margin: 0, fontWeight: '800', textShadow: '2px 2px 10px rgba(0,0,0,0.5)' }}>
                                         {paysSelectionne.pays}
                                     </h2>
-                                    <p style={{fontSize: '1.1rem', opacity: 0.9, margin: 0}}>Capitale : {paysSelectionne.capital}</p>
+                                    <p style={{ fontSize: '1.1rem', opacity: 0.9, margin: 0 }}>Capitale : {paysSelectionne.capital}</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-body-padding" style={{padding: '40px 50px'}}>
-                            <div className="modal-grid" style={{display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '40px'}}>
+                        <div className="modal-body-padding" style={{ padding: '40px 50px' }}>
+                            <div className="modal-grid" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '40px' }}>
                                 <div>
-                                    <div style={{display: 'flex', gap: '10px', marginBottom: '15px', color: '#0070bb', fontWeight: 'bold', alignItems: 'center'}}>
-                                        <Info size={20}/> Présentation
+                                    <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', color: '#0070bb', fontWeight: 'bold', alignItems: 'center' }}>
+                                        <Info size={20} /> Présentation
                                     </div>
-                                    <p style={{lineHeight: '1.7', color: '#475569', fontSize: '1.05rem', marginBottom: '30px', marginTop: 0}}>
+                                    <p style={{ lineHeight: '1.7', color: '#475569', fontSize: '1.05rem', marginBottom: '30px', marginTop: 0 }}>
                                         {paysSelectionne.desc}
                                     </p>
                                     <div style={styles.whySambaBlock}>
-                                        <ShieldCheck size={28} color="#39b54a" style={{flexShrink: 0}} />
-                                        <p style={{margin: 0, color: '#1e293b', fontSize: '0.95rem', lineHeight: 1.6}}>
+                                        <ShieldCheck size={28} color="#39b54a" style={{ flexShrink: 0 }} />
+                                        <p style={{ margin: 0, color: '#1e293b', fontSize: '0.95rem', lineHeight: 1.6 }}>
                                             <strong>Engagement SAMB'A :</strong> {paysSelectionne.pourquoi}
                                         </p>
                                     </div>
                                 </div>
-                                <div style={{background: '#f8fafc', padding: '30px', borderRadius: '20px', border: '1px solid #e2e8f0', alignSelf: 'start'}}>
-                                    <h4 style={{margin: '0 0 20px 0', fontSize: '1.1rem', color: '#1e293b'}}>Vos garanties incluses :</h4>
-                                    <div style={{display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '30px'}}>
+                                <div style={{ background: '#f8fafc', padding: '30px', borderRadius: '20px', border: '1px solid #e2e8f0', alignSelf: 'start' }}>
+                                    <h4 style={{ margin: '0 0 20px 0', fontSize: '1.1rem', color: '#1e293b' }}>Vos garanties incluses :</h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '30px' }}>
                                         {paysSelectionne.points.map((p, i) => (
-                                            <div key={i} style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem'}}>
-                                                <CheckCircle2 size={18} color="#39b54a" style={{flexShrink: 0}} /> 
-                                                <span style={{color: '#475569'}}>{p}</span>
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}>
+                                                <CheckCircle2 size={18} color="#39b54a" style={{ flexShrink: 0 }} />
+                                                <span style={{ color: '#475569' }}>{p}</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <button 
-                                        onClick={() => navigate('/souscription', { state: { destination: paysSelectionne.pays } })} 
-                                        style={{...styles.btnHero, width: '100%', justifyContent: 'center', padding: '16px', fontSize: '1.1rem', boxShadow: '0 10px 20px rgba(57, 181, 74, 0.3)'}}
+                                    <button
+                                        onClick={() => navigate('/souscription', { state: { destination: paysSelectionne.pays } })}
+                                        style={{ ...styles.btnHero, width: '100%', justifyContent: 'center', padding: '16px', fontSize: '1.1rem', boxShadow: '0 10px 20px rgba(57, 181, 74, 0.3)' }}
                                     >
                                         Souscrire pour ce pays
                                     </button>
@@ -243,15 +243,15 @@ const Accueil = () => {
             {/* --- SECTION POURQUOI NOUS CHOISIR --- */}
             <section className="section-responsive" style={styles.section}>
                 <div style={styles.sectionHeader}>
-                    <h2 className="section-title" style={{fontSize: '2.5rem', fontWeight: '800'}}>Pourquoi nous choisir ?</h2>
-                    <p style={{fontSize: '1.2rem', fontWeight: '600', color: '#424e5e', lineHeight: '1.6', maxWidth: '800px', margin: '20px auto 0 auto'}}> 
-                        <span style={{color: '#39b54a'}}>Des assurances pour tous, 100% en ligne</span> : 
-                        expatriés, étudiants, PVT, jeunes au pair, entreprises... Nous assurons tous ceux qui partent à l'étranger. 
+                    <h2 className="section-title" style={{ fontSize: '2.5rem', fontWeight: '800' }}>Pourquoi nous choisir ?</h2>
+                    <p style={{ fontSize: '1.2rem', fontWeight: '600', color: '#424e5e', lineHeight: '1.6', maxWidth: '800px', margin: '20px auto 0 auto' }}>
+                        <span style={{ color: '#39b54a' }}>Des assurances pour tous, 100% en ligne</span> :
+                        expatriés, étudiants, PVT, jeunes au pair, entreprises... Nous assurons tous ceux qui partent à l'étranger.
                     </p>
                 </div>
                 <div style={styles.gridPropos}>
                     {/* CARTE FIABILITÉ */}
-                    <div 
+                    <div
                         onMouseEnter={() => setHoveredAvantage('fiabilite')}
                         onMouseLeave={() => setHoveredAvantage(null)}
                         onClick={() => setAvantageSelectionne({
@@ -270,13 +270,13 @@ const Accueil = () => {
                         }}
                     >
                         <div style={{ display: 'flex', justifyContent: 'center' }}><Shield size={40} color="#39b54a" /></div>
-                        <h3 style={{marginTop: '15px', fontWeight: '700'}}>Fiabilité</h3>
-                        <p style={{color: '#64748b'}}>Plus de 3 ans d'expertise dans l'assurance au Gabon.</p>
-                        <span style={{color: '#39b54a', fontSize: '12px', fontWeight: 'bold'}}>En savoir plus +</span>
+                        <h3 style={{ marginTop: '15px', fontWeight: '700' }}>Fiabilité</h3>
+                        <p style={{ color: '#64748b' }}>Plus de 3 ans d'expertise dans l'assurance au Gabon.</p>
+                        <span style={{ color: '#39b54a', fontSize: '12px', fontWeight: 'bold' }}>En savoir plus +</span>
                     </div>
 
                     {/* CARTE SÉRÉNITÉ */}
-                    <div 
+                    <div
                         onMouseEnter={() => setHoveredAvantage('serenite')}
                         onMouseLeave={() => setHoveredAvantage(null)}
                         onClick={() => setAvantageSelectionne({
@@ -295,9 +295,9 @@ const Accueil = () => {
                         }}
                     >
                         <div style={{ display: 'flex', justifyContent: 'center' }}><Plane size={40} color="#0070bb" /></div>
-                        <h3 style={{marginTop: '15px', fontWeight: '700'}}>Sérénité</h3>
-                        <p style={{color: '#64748b'}}>Une assistance disponible 24h/24 où que vous soyez.</p>
-                        <span style={{color: '#0070bb', fontSize: '12px', fontWeight: 'bold'}}>En savoir plus +</span>
+                        <h3 style={{ marginTop: '15px', fontWeight: '700' }}>Sérénité</h3>
+                        <p style={{ color: '#64748b' }}>Une assistance disponible 24h/24 où que vous soyez.</p>
+                        <span style={{ color: '#0070bb', fontSize: '12px', fontWeight: 'bold' }}>En savoir plus +</span>
                     </div>
                 </div>
             </section>
@@ -305,16 +305,16 @@ const Accueil = () => {
             {/* --- MODALE POUR LES AVANTAGES --- */}
             {avantageSelectionne && (
                 <div className="modal-overlay" onClick={() => setAvantageSelectionne(null)}>
-                    <div className="modal-content" style={{maxWidth: '500px', padding: '30px', textAlign: 'center'}} onClick={e => e.stopPropagation()}>
-                        <button style={styles.closeBtn} onClick={() => setAvantageSelectionne(null)}><X size={24}/></button>
-                        <div style={{marginBottom: '20px', display: 'flex', justifyContent: 'center'}}>{avantageSelectionne.icon}</div>
-                        <h2 style={{color: '#1e293b', marginBottom: '15px', fontSize: '1.6rem', fontWeight: '700'}}>{avantageSelectionne.title}</h2>
-                        <p style={{lineHeight: '1.6', color: '#64748b', marginBottom: '25px'}}>{avantageSelectionne.text}</p>
-                        <div style={{textAlign: 'left', background: '#f8fafc', padding: '20px', borderRadius: '15px'}}>
+                    <div className="modal-content" style={{ maxWidth: '500px', padding: '30px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+                        <button style={styles.closeBtn} onClick={() => setAvantageSelectionne(null)}><X size={24} /></button>
+                        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>{avantageSelectionne.icon}</div>
+                        <h2 style={{ color: '#1e293b', marginBottom: '15px', fontSize: '1.6rem', fontWeight: '700' }}>{avantageSelectionne.title}</h2>
+                        <p style={{ lineHeight: '1.6', color: '#64748b', marginBottom: '25px' }}>{avantageSelectionne.text}</p>
+                        <div style={{ textAlign: 'left', background: '#f8fafc', padding: '20px', borderRadius: '15px' }}>
                             {avantageSelectionne.details.map((d, i) => (
-                                <div key={i} style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px'}}>
+                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                                     <CheckCircle2 size={16} color="#39b54a" />
-                                    <span style={{fontSize: '14px', fontWeight: '500', color: '#334155'}}>{d}</span>
+                                    <span style={{ fontSize: '14px', fontWeight: '500', color: '#334155' }}>{d}</span>
                                 </div>
                             ))}
                         </div>
@@ -345,7 +345,7 @@ const styles = {
     destTitle: { fontSize: '18px', margin: '10px 0 20px 0', fontWeight: '700' },
     btnSavoirPlus: { background: 'none', border: 'none', color: '#39b54a', fontWeight: 'bold', display: 'flex', gap: '8px', cursor: 'pointer', padding: 0 },
     btnVoirTout: { background: '#0070bb', color: 'white', border: 'none', padding: '12px 30px', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer' },
-    
+
     closeBtn: { position: 'absolute', top: '20px', right: '20px', background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)' },
     modalImgHeaderLarge: { height: '380px', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' },
     modalImgOverlayLarge: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: '30px 40px', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))', color: 'white' },

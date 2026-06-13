@@ -15,29 +15,48 @@ const LoginAgence = () => {
     }, []);
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await fetch('https://sambavoyage.vercel.app/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
-            
-            if (res.ok && data.user.role === 'agence') {
-                // --- MODIFICATIONS ICI ---
-                localStorage.setItem('role', 'agence');
-                // On stocke tout l'objet user (contient l'ID, l'email, le nom, etc.)
-                localStorage.setItem('agenceConnectee', JSON.stringify(data.user)); 
-                
-                navigate('/dashboard-agence');
-            } else { 
-                alert(data.error || "Accès refusé"); 
-            }
-        } catch (err) { 
-            alert("Erreur serveur"); 
+    e.preventDefault();
+    try {
+        console.log("🚀 Envoi de la tentative de connexion pour :", email);
+        
+        const res = await fetch('https://sambavoyage.vercel.app/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        // Sécurité si le serveur renvoie autre chose que du JSON
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const textError = await res.text();
+            throw new Error(`Le serveur n'a pas renvoyé de JSON mais : ${textError}`);
         }
-    };
+
+        const data = await res.json();
+        console.log("📥 Données reçues du serveur :", data);
+        
+        if (res.ok) {
+            // Sécurité : On vérifie si data.user existe pour éviter le crash local
+            if (data && data.user) {
+                if (data.user.role === 'agence' || data.user.role === 'administrateur') {
+                    localStorage.setItem('role', data.user.role);
+                    localStorage.setItem('agenceConnectee', JSON.stringify(data.user)); 
+                    navigate('/dashboard-agence');
+                } else {
+                    alert(`Accès refusé : Votre rôle est "${data.user.role}" au lieu de "agence".`);
+                }
+            } else {
+                throw new Error("Structure de données invalide : 'data.user' est manquant.");
+            }
+        } else { 
+            alert(data.error || data.message || "Identifiants incorrects"); 
+        }
+    } catch (err) { 
+        console.error("❌ Erreur attrapée dans le formulaire :", err);
+        // On affiche la VRAIE erreur pour savoir ce qui bloque l'envoi
+        alert(`Erreur technique : ${err.message}`); 
+    }
+};
 
     return (
         <div style={styles.body}>

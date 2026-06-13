@@ -9,9 +9,10 @@ const InscriptionAgence = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleRegister = async (e) => {
+   const handleRegister = async (e) => {
         e.preventDefault();
         try {
+            console.log("🚀 Envoi de la requête vers le backend...");
             const res = await fetch('https://sambavoyage.vercel.app/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -23,15 +24,25 @@ const InscriptionAgence = () => {
                 })
             });
 
+            // Sécurité : Si le serveur répond avec du HTML (page d'erreur 404 Vercel) au lieu de JSON
+            const contentType = res.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const codeStatut = res.status;
+                const texteErreur = await res.text();
+                throw new Error(`Le serveur a répondu avec le code ${codeStatut} (Non-JSON). Contenu : ${texteErreur.substring(0, 100)}...`);
+            }
+
+            const data = await res.json();
             if (res.ok) {
                 alert("Compte agence créé avec succès !");
                 navigate('/login-agence');
             } else {
-                const data = await res.json();
                 alert(data.error || "Erreur d'inscription");
             }
         } catch (err) {
-            alert("Impossible de joindre le serveur");
+            console.error("❌ Erreur système attrapée :", err);
+            // On affiche le VRAI message de l'erreur dans l'alerte
+            alert(`Erreur technique : ${err.message}`);
         }
     };
 
